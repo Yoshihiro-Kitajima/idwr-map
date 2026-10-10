@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="JIHSのIDWR速報CSVに基づく、感染症の全国・都道府県別の定点当たり報告数と直近10週の推移。">
+  <title>感染症の週次動向 | IDWRデータビュー</title>
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">本文へ移動</a>
+  <header class="masthead"><div class="shell masthead-inner"><a class="brand" href="./"><span class="brand-mark" aria-hidden="true">＋</span>IDWR <span>DATA VIEW</span></a><span class="masthead-note">JIHS公開データを可視化した非公式サイト</span></div></header>
+  <main id="main" class="shell">
+    <section class="intro"><div><p class="eyebrow">JAPAN · WEEKLY SURVEILLANCE</p><h1>感染症の週次動向</h1><p class="intro-text">地域ごとの報告状況を、地図と推移で確認する。</p></div><div class="intro-status"><span class="pill">速報値</span><p id="latest-label">データを読み込んでいます</p></div></section>
+    <p class="notice">速報値は後日修正される場合があります。表示対象は週報告の定点把握疾患です。</p>
+    <div class="update-controls"><button id="update-data" type="button" disabled>最新データに更新</button><p id="update-status" role="status">更新ボタンを使うには「更新できる画面を開く.cmd」から開いてください。公開サイトは定期更新です。</p></div><div id="error" class="error" role="alert" hidden></div>
+    <section class="controls" aria-label="データの選択"><label class="disease-control">疾患<select id="disease" disabled></select></label><label>年<select id="year" disabled></select></label><label>報告週<select id="week" disabled></select></label><div class="week-controls"><button id="prev-week" type="button" disabled aria-label="前の報告週">←</button><button id="next-week" type="button" disabled aria-label="次の報告週">→</button></div><p id="period" class="period"></p></section>
+    <section class="overview" aria-label="全国の報告状況"><div><span class="metric-label">全国の定点当たり報告数</span><p class="national-value"><strong id="national-rate">—</strong><span>人 / 定点</span></p></div><div><span class="metric-label">全国の前週比</span><p class="overview-change" id="national-change">—</p></div><div><span class="metric-label">全国の報告数</span><p class="overview-total"><strong id="national-reports">—</strong><span>人</span></p></div></section>
+    <div class="workspace">
+      <section class="map-panel panel"><div class="panel-heading"><div><p class="eyebrow">PREFECTURE MAP</p><h2>都道府県別の報告状況</h2></div><span class="small-note">47都道府県</span></div><div id="map" class="map" aria-label="都道府県別の定点当たり報告数"></div><div id="legend" class="legend"></div><p class="map-note">色の範囲は選択週の最大値に合わせています。警報・注意報の基準を示すものではありません。</p><p class="map-credit">地図：<a href="https://github.com/geolonia/japanese-prefectures" target="_blank" rel="noopener noreferrer">Geolonia / 原図 Lincun</a>（<a href="./assets/GFDL.txt">GFDL</a>）。一部の離島は省略。表示色・選択動作を追加。</p></section>
+      <section class="detail-panel panel" aria-label="選択した都道府県の詳細"><div class="panel-heading"><div><p class="eyebrow">PREFECTURE DETAIL</p><h2 id="pref-title">東京都</h2></div><label class="visually-hidden" for="prefecture">都道府県を選択</label><select id="prefecture" disabled></select></div><p class="detail-disease" id="detail-disease"></p><div aria-live="polite" aria-atomic="true"><span class="metric-label">定点当たり報告数</span><p class="detail-value"><strong id="pref-rate">—</strong><span>人 / 定点</span></p><div class="detail-change"><span>前週比</span><strong id="pref-change">—</strong></div><p id="change-note" class="small-note"></p><p class="pref-reports">報告数 <strong id="pref-reports">—</strong> 人</p></div><div class="trend-heading"><h3 id="trend-title">直近10週の推移</h3><span>選択週を含む</span></div><div class="range-controls"><label>開始週<select id="range-start"></select></label><label>終了週<select id="range-end"></select></label></div><div id="trend" class="trend"></div><p id="trend-note" class="small-note"></p><details class="trend-data"><summary>週ごとの数値と出典を見る</summary><table><thead><tr><th>報告週</th><th>定点当たり</th><th>一次CSV</th></tr></thead><tbody id="trend-table"></tbody></table></details></section>
+    </div>
+    <section class="pref-list panel"><div class="panel-heading"><div><p class="eyebrow">ALL PREFECTURES</p><h2>47都道府県の数値</h2></div><span class="small-note">クリックすると詳細を表示</span></div><div id="pref-buttons" class="pref-grid"></div></section>
+    <section class="source-panel" aria-labelledby="source-title"><h2 id="source-title">データの出典と更新情報</h2><dl><div><dt>一次データ</dt><dd>国立健康危機管理研究機構（JIHS） IDWR速報・定点把握疾患（週報告）</dd></div><div><dt>対象週の公開ページ</dt><dd><a id="source-page" target="_blank" rel="noopener noreferrer"></a></dd></div><div><dt>対象週の速報CSV</dt><dd><a id="source-csv" target="_blank" rel="noopener noreferrer"></a></dd></div><div><dt>CSV取得日時</dt><dd id="retrieved-at">—</dd></div><div><dt>CSV作成日 / 掲載日</dt><dd id="source-dates">—</dd></div><div><dt>サイトの更新確認日時</dt><dd id="checked-at">—</dd></div></dl><p>全国値はCSVの「総数」行、都道府県値は各都道府県の行にある「定当」を使用しています。報告数の人口当たり換算や、都道府県の単純平均は行っていません。</p><p>原CSVの「-」や空欄は数値の0と区別し、そのままの状態を保持しています。「—」の詳細は都道府県を選択して確認できます。</p><p id="method-note"></p><p><a href="https://id-info.jihs.go.jp/usage-contract.html" target="_blank" rel="noopener noreferrer">JIHSの利用規約</a> · <a href="./data/data.json" download>整形済みJSONをダウンロード</a></p></section>
+  </main>
+  <footer class="shell footer">IDWR DATA VIEW <span>出典に基づく週次データの閲覧</span></footer>
+  <noscript><p class="shell">表示にはJavaScriptが必要です。<a href="./data/data.json">データJSON</a>を直接取得できます。</p></noscript>
+</body>
+</html>

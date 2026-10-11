@@ -1,0 +1,45 @@
+name: Update JIHS IDWR data
+
+on:
+  schedule:
+    # Friday 18:23 Japan time (UTC+09:00).
+    - cron: '23 9 * * 5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: idwr-update
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Download and validate official CSVs
+        run: python -m idwr.update --start-year 2025 --refresh-weeks 12
+      - name: Test parser and UI calculations
+        run: |
+          python -m unittest discover -s tests -v
+          node --test tests/model.test.js
+          python scripts/build.py
+      - name: Commit verified source and public JSON
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/raw data/source-index.json public/data/data.json
+          if git diff --cached --quiet; then
+            echo "No data changes."
+          else
+            git commit -m "Update verified JIHS IDWR weekly data"
+            git push
+          fi

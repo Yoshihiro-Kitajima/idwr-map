@@ -208,7 +208,7 @@ async function init() {
       }catch(error){status.textContent=error.message;}finally{button.disabled=false;}
     });
     if(location.protocol!=="file:") {
-      fetch("./api/capabilities",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(value=>{if(value?.update){$("update-data").disabled=false;$("update-status").textContent="ボタンを押すと、JIHSの最新公開データを取得します。";}}).catch(()=>{});
+      fetch("./api/capabilities",{cache:"no-store"}).then(r=>r.ok?r.json():null).then(value=>{if(value?.update){$("update-data").hidden=false;$("update-data").disabled=false;$("update-status").textContent="ボタンを押すと、JIHSの最新公開データを取得します。";}}).catch(()=>{});
     }
     $("prev-week").addEventListener("click",()=>moveWeek(-1));$("next-week").addEventListener("click",()=>moveWeek(1));
     render();

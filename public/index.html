@@ -2,6 +2,14 @@
 <html lang="ja">
 <head>
   <meta charset="utf-8">
+  <!-- Google Analytics: audience measurement -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0P58Z5VKLR"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-0P58Z5VKLR', {allow_google_signals: false, allow_ad_personalization_signals: false});
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="description" content="JIHSのIDWR速報CSVに基づく、感染症の全国・都道府県別の定点当たり報告数と直近10週の推移。">
   <title>感染症の週次動向 | IDWRデータビュー</title>
@@ -23,6 +31,7 @@
     </div>
     <section class="pref-list panel"><div class="panel-heading"><div><p class="eyebrow">ALL PREFECTURES</p><h2>47都道府県の数値</h2></div><span class="small-note">クリックすると詳細を表示</span></div><div id="pref-buttons" class="pref-grid"></div></section>
     <section class="source-panel" aria-labelledby="source-title"><h2 id="source-title">データの出典と更新情報</h2><dl><div><dt>一次データ</dt><dd>国立健康危機管理研究機構（JIHS） IDWR速報・定点把握疾患（週報告）</dd></div><div><dt>対象週の公開ページ</dt><dd><a id="source-page" target="_blank" rel="noopener noreferrer"></a></dd></div><div><dt>対象週の速報CSV</dt><dd><a id="source-csv" target="_blank" rel="noopener noreferrer"></a></dd></div><div><dt>CSV取得日時</dt><dd id="retrieved-at">—</dd></div><div><dt>CSV作成日 / 掲載日</dt><dd id="source-dates">—</dd></div><div><dt>サイトの更新確認日時</dt><dd id="checked-at">—</dd></div></dl><p>全国値はCSVの「総数」行、都道府県値は各都道府県の行にある「定当」を使用しています。報告数の人口当たり換算や、都道府県の単純平均は行っていません。</p><p>原CSVの「-」や空欄は数値の0と区別し、そのままの状態を保持しています。「—」の詳細は都道府県を選択して確認できます。</p><p id="method-note"></p><p><a href="https://id-info.jihs.go.jp/usage-contract.html" target="_blank" rel="noopener noreferrer">JIHSの利用規約</a> · <a href="./data/data.json" download>整形済みJSONをダウンロード</a></p></section>
+    <details class="source-panel"><summary>アクセス解析について</summary><p>当サイトは閲覧状況の把握と改善のためGoogle アナリティクスを利用し、Cookie等により閲覧情報をGoogleへ送信します。広告のパーソナライズには利用しません。</p><p><a href="https://policies.google.com/technologies/partner-sites?hl=ja" target="_blank" rel="noopener noreferrer">Googleによるデータの利用</a> · <a href="https://tools.google.com/dlpage/gaoptout?hl=ja" target="_blank" rel="noopener noreferrer">計測を無効にする方法</a></p></details>
   </main>
   <footer class="shell footer">IDWR DATA VIEW <span>出典に基づく週次データの閲覧</span></footer>
   <noscript><p class="shell">表示にはJavaScriptが必要です。<a href="./data/data.json">データJSON</a>を直接取得できます。</p></noscript>
